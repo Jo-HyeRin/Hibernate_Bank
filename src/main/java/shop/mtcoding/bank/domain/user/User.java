@@ -7,11 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
 import shop.mtcoding.bank.config.enums.UserEnum;
+import shop.mtcoding.bank.domain.AudingTime;
 
 @Getter
 @Table(name = "users")
 @Entity
-public class User {
+public class User extends AudingTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
