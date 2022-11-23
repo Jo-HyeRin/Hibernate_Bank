@@ -42,7 +42,7 @@ public class Account extends AudingTime {
     @Column(nullable = false)
     private Boolean isActive; // 계좌 활성화 여부
 
-    // FK (User:Account = 1:N),
+    // FK (Account:User = N:1),
     // 테이블 제어권을 내가 갖기 위해 연관관계 설정 시 항상 Lazy전략 사용하기로 한다.
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
