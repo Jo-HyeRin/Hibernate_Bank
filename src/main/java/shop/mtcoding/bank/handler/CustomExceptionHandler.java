@@ -19,7 +19,6 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> apiException(CustomApiException e) {
         log.debug("디버그 : CustomExceptionHandler 실행됨");
         return new ResponseEntity<>(new ResponseDto<>(e.getMessage(), null), HttpStatus.BAD_REQUEST);
-
     }
 
 }

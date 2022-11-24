@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.mtcoding.bank.config.auth.LoginUser;
 import shop.mtcoding.bank.dto.ResponseDto;
+import shop.mtcoding.bank.dto.UserRespDto.LoginRespDto;
 
 // 필터에서 터진 건 핸들러가 낚아챌 수 없다.
 // throw new CustomApiException("로그인 실패", HttpStatus.BAD_REQUEST); 불가능 !
@@ -32,6 +33,16 @@ public class CustomLoginHandler implements AuthenticationSuccessHandler, Authent
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                         Authentication authentication) throws IOException, ServletException {
                 log.debug("디버그 : onAuthenticationSuccess 실행됨");
+
+                LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                LoginRespDto loginRespDto = new LoginRespDto(loginUser.getUser());
+
+                ObjectMapper om = new ObjectMapper();
+                ResponseDto<?> responseDto = new ResponseDto<>("로그인 성공", loginRespDto);
+                String responseBody = om.writeValueAsString(responseDto);
+                response.setContentType("application/json; charset=utf-8");
+                response.setStatus(200);
+                response.getWriter().println(responseBody);
         }
 
         // ControllerAdvice가 제어하지 못하는 것을 내가 직접 제어하는 것.
