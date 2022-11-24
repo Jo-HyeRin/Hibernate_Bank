@@ -19,9 +19,9 @@ public class CustomApiExceptionTest {
 
         // when
         CustomApiException ex = new CustomApiException(msg, httpStatus);
-        // log.debug("디버그 : " + ex.getMessage());
-        // log.debug("디버그 : " + ex.getHttpStatus());
-        // log.debug("디버그 : " + ex.getHttpStatus().value());
+        // System.out.println("디버그 : " + ex.getMessage());
+        // System.out.println("디버그 : " + ex.getHttpStatus());
+        // System.out.println("디버그 : " + ex.getHttpStatus().value());
 
         // then
         assertThat(ex.getMessage()).isEqualTo("해당 id가 없습니다.");
