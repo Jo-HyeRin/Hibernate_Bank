@@ -11,7 +11,7 @@ public class CustomValidationApiException extends RuntimeException {
     // 굳이 받을 필요 없겠지만 400으로 설정해준다.
     private final int httpStatusCode = 400;
 
-    // 에러 메시지를 함께 전닭.
+    // 에러 메시지를 함께 전달
     private Map<String, String> errorMap;
 
     public CustomValidationApiException(Map<String, String> errorMap) {
