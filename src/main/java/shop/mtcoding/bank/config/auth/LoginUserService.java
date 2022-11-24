@@ -18,8 +18,9 @@ public class LoginUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        // UserDetails
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // 세션에 접근하는 방법. 아래가 찾아지면 세션 접근 성공.
+        // LoginUser loginUser = (LoginUser)
+        // SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(
