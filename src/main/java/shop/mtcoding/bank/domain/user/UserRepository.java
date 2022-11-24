@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     // JpaRepository는 기본 CRUD를 다 제공해준다.
+    // findById, findByAll, save(id 없으면 insert, id값이 있으면 update), deleteById
     // 기본 제공되지 않는 메서드는 아래에 생성한다.
 
     // Named Query : findBySomething 이라고 적으면 where절에 Something을 자동으로 걸어준다.
