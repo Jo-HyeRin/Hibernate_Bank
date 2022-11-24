@@ -12,10 +12,15 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import shop.mtcoding.bank.config.exception.CustomApiException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import shop.mtcoding.bank.dto.ResponseDto;
+
+// 필터에서 터진 건 핸들러가 낚아챌 수 없다.
+// throw new CustomApiException("로그인 실패", HttpStatus.BAD_REQUEST); 불가능 !
 
 @Component
-public class LoginHandler implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
+public class CustomLoginHandler implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
 
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -25,12 +30,17 @@ public class LoginHandler implements AuthenticationSuccessHandler, Authenticatio
 
         }
 
+        // ControllerAdvice가 제어하지 못하는 것을 내가 직접 제어하는 것.
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                         AuthenticationException exception) throws IOException, ServletException {
                 System.out.println("로그인이 실패하였습니다.");
-                throw new CustomApiException("로그인 실패", 400);
-
+                ObjectMapper om = new ObjectMapper();
+                ResponseDto<?> responseDto = new ResponseDto<>("로그인 실패", null);
+                String responseBody = om.writeValueAsString(responseDto);
+                response.setContentType("application/json; charset=utf-8");
+                response.setStatus(400);
+                response.getWriter().println(responseBody);
         }
 
 }

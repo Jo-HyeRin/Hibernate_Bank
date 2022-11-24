@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import shop.mtcoding.bank.config.enums.UserEnum;
-import shop.mtcoding.bank.handler.LoginHandler;
+import shop.mtcoding.bank.handler.CustomLoginHandler;
 
 // SecurityFilterChain : 만들어져 있는 기본 필터 (약 14개)
 // 해당 필터들을 커스터마이징해서 이용해보자.
@@ -17,7 +17,7 @@ import shop.mtcoding.bank.handler.LoginHandler;
 public class SecurityConfig {
 
     @Autowired
-    private LoginHandler loginHandler;
+    private CustomLoginHandler customLoginHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() { // Security 라이브러리가 가지고 있는 비밀번호 보안 설정 코드(SHA 대체)
@@ -43,8 +43,8 @@ public class SecurityConfig {
                 // .usernameParameter("username") // 디폴트 값이 username, password
                 // .passwordParameter("password") // 다르게 설정해도 됨.
                 .loginProcessingUrl("/api/login") // login url 설정
-                .successHandler(loginHandler) // login 성공 시
-                .failureHandler(loginHandler); // login 실패 시
+                .successHandler(customLoginHandler) // login 성공 시
+                .failureHandler(customLoginHandler); // login 실패 시
 
         // successHandler, failureHandler : 로그인 후 성공하든 실패하든 행위를 하고 싶은데 메서드를 받을 수 없다.
         // 둘의 타입을 임플먼트하는 클래스(LoginHandler)를 생성하고 주입 받음. 그리고 그 클래스의 메서드를 소환하여 설정.
