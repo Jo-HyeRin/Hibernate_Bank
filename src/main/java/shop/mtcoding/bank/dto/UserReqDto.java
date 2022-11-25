@@ -6,11 +6,13 @@ import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import shop.mtcoding.bank.config.enums.UserEnum;
 import shop.mtcoding.bank.domain.user.User;
 
 public class UserReqDto {
 
+    @ToString
     @Setter
     @Getter
     public static class JoinReqDto {
@@ -32,4 +34,12 @@ public class UserReqDto {
                     .build();
         }
     }
+
+    @Getter
+    @Setter
+    public static class LoginReqDto {
+        private String username;
+        private String password;
+    }
+
 }

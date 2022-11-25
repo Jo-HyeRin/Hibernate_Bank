@@ -36,7 +36,7 @@ public class User extends AudingTime {
     private String email;
 
     @Enumerated(EnumType.STRING) // enum 을 스트링 타입으로 !
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private UserEnum role; // 권한 : ADMIN, CUSTOMER
 
     @Builder

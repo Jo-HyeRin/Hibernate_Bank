@@ -29,7 +29,7 @@ public class UserApiController {
     // 세션값에 접근하는 방법 : @AuthenticationPrincipal
     @GetMapping("/user/session")
     public String userSession(@AuthenticationPrincipal LoginUser loginUser) {
-        return "username : " + loginUser.getUsername();
+        return "id : " + loginUser.getUser().getId();
     }
 
     @PostMapping("/join")
