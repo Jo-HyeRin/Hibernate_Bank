@@ -33,10 +33,10 @@ public class Account extends AudingTime {
     private String ownerName; // 계좌주 실명
 
     @Column(nullable = false, length = 4)
-    private String password;
+    private String password; // 계좌비밀번호
 
     @Column(nullable = false)
-    private Long balance; // 잔액 (int는 20억 까지만 되니 Long 타입 사용하기)
+    private Long balance; // 잔액 (int는 20억 까지만 되니 Long 타입 사용하기), (디폴트값 1000원)
 
     // 커멜 케이스는 DB에 언더스코어로 생성된다.
     @Column(nullable = false)

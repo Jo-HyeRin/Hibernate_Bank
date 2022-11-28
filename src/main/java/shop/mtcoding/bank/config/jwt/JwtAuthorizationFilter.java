@@ -51,9 +51,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             Authentication authentication = new UsernamePasswordAuthenticationToken(loginUser,
                     null, loginUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.debug("디버그 : 토큰 검증 완료, 필터 탐");
         }
 
-        // 헤더가 없으면 컨트롤러로 진입함 -> 세션이없어서 시큐리티 필터 안탐
+        // 헤더가 없으면 그냥 넘어감.
+        log.debug("디버그 : 토큰 검증 실패, 필터 탐. 세션 없어서 시큐리티 필터가 컨트롤러 진입 막음");
         chain.doFilter(request, response);
 
     }
