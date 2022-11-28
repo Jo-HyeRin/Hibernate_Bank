@@ -17,6 +17,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import shop.mtcoding.bank.config.auth.LoginUser;
 
+/*
+ * JwtAuthorizationFilter는 모든 주소에서 동작한다.
+ */
+
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -32,7 +36,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         // 1 헤더 검증
         if (isHeaderVerify(request, response)) { // 헤더가 있으면
-            // log.debug("디버그 : 헤더검증 있음");
+            // log.debug("디버그 : 헤더 있음");
 
             // 2 토큰 파싱 (Bearer 없애기) : Bearer는 JWT 토큰이라는 것을 알려주는 프로토콜이라 사용하는데 파싱에는 필요없으니 지워준다
             String token = request.getHeader(JwtProperties.HEADER_STRING)
@@ -49,7 +53,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        // 헤더가 없으면 세션이 있는 경우와 없는 경우로 나뉘어서 컨트롤러로 진입함
+        // 헤더가 없으면 컨트롤러로 진입함 -> 세션이없어서 시큐리티 필터 안탐
         chain.doFilter(request, response);
 
     }

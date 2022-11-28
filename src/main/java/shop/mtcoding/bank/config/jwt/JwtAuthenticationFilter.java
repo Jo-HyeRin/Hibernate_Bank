@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String jwtToken = JwtProcess.create(loginUser);
 
         // 토큰을 헤더에 추가
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING, jwtToken);
 
         // 토큰 담아서 로그인 성공 응답하기
         LoginRespDto loginRespDto = new LoginRespDto(loginUser.getUser());
