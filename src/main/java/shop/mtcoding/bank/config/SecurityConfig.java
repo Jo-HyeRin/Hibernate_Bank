@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import shop.mtcoding.bank.config.enums.UserEnum;
 import shop.mtcoding.bank.config.jwt.JwtAuthenticationFilter;
@@ -25,6 +28,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // 모든 필터 등록은 여기서 !
     public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -32,6 +36,7 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http.addFilter(new JwtAuthenticationFilter(authenticationManager));
             http.addFilter(new JwtAuthorizationFilter(authenticationManager));
+            http.cors(); // CorsConfigurationSource 활성화 코드
         }
     }
 
@@ -44,6 +49,7 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.formLogin().disable();
         http.httpBasic().disable();
+        http.apply(new MyCustomDsl());
 
         http.authorizeHttpRequests()
                 .antMatchers("/api/transaction/**").authenticated() // authenticated : 로그인유저만 허용
@@ -52,7 +58,20 @@ public class SecurityConfig {
                 .antMatchers("/api/admin/**").hasRole("ROLE_" + UserEnum.ADMIN)
                 .anyRequest().permitAll();
 
-        http.apply(new MyCustomDsl());
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource configurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        // configuration.addAllowedOrigin("*"); // 프론트 서버의 주소. * 사용못함. 주소 정확히 적어야한다.
+        configuration.addAllowedOriginPattern("*"); // 프론트 서버의 주소
+        configuration.setAllowCredentials(true); // 클라이언트에서 쿠키, 인증 이런 헤더 허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 주소 설정
+        return source;
     }
 }
