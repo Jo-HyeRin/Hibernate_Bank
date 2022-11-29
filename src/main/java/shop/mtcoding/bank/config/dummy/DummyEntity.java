@@ -15,6 +15,7 @@ public abstract class DummyEntity { // abstract 붙이면 new 불가, 상속받�
                 .username(username)
                 .password(encPassword)
                 .email(username + "@nate.com")
+                .fullName(username + "성명")
                 .role(username.equals("admin") ? UserEnum.ADMIN : UserEnum.CUSTOMER)
                 .build();
         return user;
@@ -24,7 +25,6 @@ public abstract class DummyEntity { // abstract 붙이면 new 불가, 상속받�
         Account account = Account.builder()
                 .number(number)
                 .password("1234")
-                .ownerName(user.getUsername())
                 .balance(1000L)
                 .user(user)
                 .isActive(true)

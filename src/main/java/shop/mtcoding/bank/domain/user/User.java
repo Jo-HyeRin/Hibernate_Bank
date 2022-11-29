@@ -27,7 +27,7 @@ public class User extends AudingTime {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 20)
-    private String username;
+    private String username; // 아이디
 
     @Column(nullable = false, length = 60)
     private String password;
@@ -35,16 +35,20 @@ public class User extends AudingTime {
     @Column(nullable = false, length = 50)
     private String email;
 
+    @Column(nullable = false, length = 20)
+    private String fullName; // 성명
+
     @Enumerated(EnumType.STRING) // enum 을 스트링 타입으로 !
     @Column(nullable = false)
     private UserEnum role; // 권한 : ADMIN, CUSTOMER
 
     @Builder
-    public User(Long id, String username, String password, String email, UserEnum role) {
+    public User(Long id, String username, String password, String email, String fullName, UserEnum role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.fullName = fullName;
         this.role = role;
     }
 
