@@ -3,6 +3,7 @@ package shop.mtcoding.bank.config.dummy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import shop.mtcoding.bank.config.enums.UserEnum;
+import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.user.User;
 
 public abstract class DummyEntity { // abstract 붙이면 new 불가, 상속받아야만 사용가능.
@@ -17,6 +18,18 @@ public abstract class DummyEntity { // abstract 붙이면 new 불가, 상속받�
                 .role(username.equals("admin") ? UserEnum.ADMIN : UserEnum.CUSTOMER)
                 .build();
         return user;
+    }
+
+    protected Account newAccount(Long number, User user) {
+        Account account = Account.builder()
+                .number(number)
+                .password("1234")
+                .ownerName(user.getUsername())
+                .balance(1000L)
+                .user(user)
+                .isActive(true)
+                .build();
+        return account;
     }
 
 }
