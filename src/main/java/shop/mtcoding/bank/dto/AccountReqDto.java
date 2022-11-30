@@ -22,4 +22,10 @@ public class AccountReqDto {
                     .build();
         }
     }
+
+    @Setter
+    @Getter
+    public static class AccountDeleteReqDto {
+        private String password;
+    }
 }

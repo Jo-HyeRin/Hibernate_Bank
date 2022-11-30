@@ -8,14 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import shop.mtcoding.bank.config.exception.CustomApiException;
 import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.account.AccountRepository;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
+import shop.mtcoding.bank.dto.AccountReqDto.AccountDeleteReqDto;
 import shop.mtcoding.bank.dto.AccountReqDto.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDto;
 import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDtoV2;
@@ -69,4 +68,14 @@ public class AccountService {
         User user = userRepository.findByActiveUserIdv3(userId);
         return new AccountListRespDtoV3(user);
     }
+
+    // 본인계좌삭제하기
+    @Transactional
+    public void 본인_계좌삭제(AccountDeleteReqDto accountDeleteReqDto, Long userId, Long accountId) {
+        // 계좌 확인 (있는지 여부)
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CustomApiException("해당 계좌가 없습니다", HttpStatus.BAD_REQUEST));
+        // 계좌 삭제하기
+        account.deleteAccount(userId, accountDeleteReqDto.getPassword());
+    } // 더티체킹(update 문 전송됨)
 }
