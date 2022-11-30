@@ -38,7 +38,6 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
             http.addFilter(new JwtAuthenticationFilter(authenticationManager));
             http.addFilter(new JwtAuthorizationFilter(authenticationManager));
-            // http.cors(); // CorsConfigurationSource 활성화 코드
         }
     }
 
@@ -47,6 +46,7 @@ public class SecurityConfig {
         log.debug("디버그 : SecurityConfig의 filterChain");
         http.headers().frameOptions().disable();
         http.csrf().disable();
+        http.cors().configurationSource(configurationSource()); // CorsConfigurationSource 활성화 코드
 
         // ExceptionTranslationFilter(인증 권한 확인 필터)
         http.exceptionHandling().authenticationEntryPoint(
@@ -58,6 +58,7 @@ public class SecurityConfig {
         http.formLogin().disable();
         http.httpBasic().disable();
         http.apply(new MyCustomDsl());
+
         http.authorizeHttpRequests()
                 .antMatchers("/api/transaction/**").authenticated() // authenticated : 로그인유저만 허용
                 .antMatchers("/api/user/**").authenticated()
@@ -68,11 +69,12 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        // configuration.setAllowedMethods(List.of("GET", "POST", "PUT"));
+
         // configuration.addAllowedOrigin("*"); // 프론트 서버의 주소. * 사용못함. 주소 정확히 적어야한다.
         configuration.addAllowedOriginPattern("*"); // 프론트 서버의 주소
         configuration.setAllowCredentials(true); // 클라이언트에서 쿠키, 인증 이런 헤더 허용

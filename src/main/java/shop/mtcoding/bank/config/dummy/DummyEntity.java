@@ -15,7 +15,7 @@ public abstract class DummyEntity { // abstract 붙이면 new 불가, 상속받�
                 .username(username)
                 .password(encPassword)
                 .email(username + "@nate.com")
-                .fullName(username + "성명")
+                .fullName(username)
                 .role(username.equals("admin") ? UserEnum.ADMIN : UserEnum.CUSTOMER)
                 .build();
         return user;

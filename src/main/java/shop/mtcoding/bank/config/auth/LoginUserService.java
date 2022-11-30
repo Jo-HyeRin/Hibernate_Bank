@@ -9,9 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
 
+@RequiredArgsConstructor
 @Service
 public class LoginUserService implements UserDetailsService {
     // login process customizing 하는 곳.

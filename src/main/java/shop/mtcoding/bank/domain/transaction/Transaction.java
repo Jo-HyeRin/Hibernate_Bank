@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import shop.mtcoding.bank.config.enums.TransactionEnum;
 import shop.mtcoding.bank.domain.account.Account;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "transaction")
 @Entity

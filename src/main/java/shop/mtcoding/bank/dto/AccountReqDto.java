@@ -21,7 +21,5 @@ public class AccountReqDto {
                     .isActive(true)
                     .build();
         }
-
     }
-
 }

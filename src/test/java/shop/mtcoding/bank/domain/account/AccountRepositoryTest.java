@@ -23,10 +23,8 @@ public class AccountRepositoryTest extends DummyEntity {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private EntityManager em; // 직접 autoincrement 초기화 시킬 것.
 

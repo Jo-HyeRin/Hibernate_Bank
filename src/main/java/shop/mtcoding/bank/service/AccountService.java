@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import shop.mtcoding.bank.config.exception.CustomApiException;
 import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.account.AccountRepository;
@@ -16,6 +18,8 @@ import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
 import shop.mtcoding.bank.dto.AccountReqDto.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDto;
+import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDtoV2;
+import shop.mtcoding.bank.dto.AccountRespDto.AccountListRespDtoV3;
 import shop.mtcoding.bank.dto.AccountRespDto.AccountSaveRespDto;
 
 @RequiredArgsConstructor
@@ -30,16 +34,39 @@ public class AccountService {
     @Transactional
     public AccountSaveRespDto 계좌생성(AccountSaveReqDto accountSaveReqDto, Long userId) {
         log.debug("디버그 : 계좌생성 서비스 호출됨");
+        // 검증
         User userPS = userRepository.findById(userId)
                 .orElseThrow(
                         () -> new CustomApiException("탈퇴된 유저로 계좌를 생성할 수 없습니다", HttpStatus.FORBIDDEN));
+        // 실행
         Account account = accountSaveReqDto.toEntity(userPS);
         Account accountPS = accountRepository.save(account);
+        // DTO 응답
         return new AccountSaveRespDto(accountPS);
     }
 
     public AccountListRespDto 본인_계좌목록보기(Long userId) {
         List<Account> accountListPS = accountRepository.findByActiveUserId(userId);
-        return new AccountListRespDto(accountListPS);
+        if (accountListPS.size() == 0) {
+            User userPS = userRepository.findById(userId).orElseThrow(
+                    () -> new CustomApiException("사용자를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST));
+            return new AccountListRespDto(userPS);
+        } else {
+            return new AccountListRespDto(accountListPS);
+        }
+    }
+
+    // select 두 번
+    public AccountListRespDtoV2 본인_계좌목록보기V2(Long userId) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저 못 찾음", HttpStatus.BAD_REQUEST));
+        List<Account> accountListPS = accountRepository.findByActiveUserIdV2(userId);
+        return new AccountListRespDtoV2(userPS, accountListPS);
+    }
+
+    // 양방향 매핑
+    public AccountListRespDtoV3 본인_계좌목록보기V3(Long userId) {
+        User user = userRepository.findByActiveUserIdv3(userId);
+        return new AccountListRespDtoV3(user);
     }
 }
