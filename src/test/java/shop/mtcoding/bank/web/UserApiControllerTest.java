@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,6 +19,7 @@ import shop.mtcoding.bank.dto.UserReqDto.JoinReqDto;
 // @Transactional // 메서드실행할때마다 롤백되는 springframework 어노테이션 
 // -> 우리는 PK 자동생성때문에 autoincrement 자동 초기화가 필요하다. truncate 사용할것.
 
+@Sql("classpath:db/truncate.sql")
 @ActiveProfiles("test")
 @AutoConfigureMockMvc // MockMvc 주입
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
