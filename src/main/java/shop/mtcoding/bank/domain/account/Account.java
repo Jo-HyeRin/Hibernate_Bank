@@ -82,4 +82,9 @@ public class Account extends AudingTime {
         checkPassword(password);
         deActiveAccount();
     }
+
+    // 입금하기
+    public void 입금하기(Long amount) {
+        this.balance += amount;
+    }
 }
