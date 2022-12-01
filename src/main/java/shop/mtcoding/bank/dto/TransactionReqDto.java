@@ -19,6 +19,7 @@ public class TransactionReqDto {
             Transaction transaction = Transaction.builder()
                     .withdrawAccount(null)
                     .depositAccount(depositAccount)
+                    .depositAccountBalance(depositAccount.getBalance())
                     .amount(amount)
                     .gubun(TransactionEnum.valueOf(gubun))
                     .build();
