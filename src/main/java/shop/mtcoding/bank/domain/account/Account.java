@@ -84,7 +84,15 @@ public class Account extends AudingTime {
     }
 
     // 입금하기
-    public void 입금하기(Long amount) {
+    public void deposit(Long amount) {
         this.balance += amount;
+    }
+
+    // 출금하기 // synchronized :해당 메서드를 동시에 실행할 수 없게 한다.
+    synchronized public void withdraw(Long amount) {
+        if (balance < amount) {
+            throw new CustomApiException("계좌 잔액이 부족합니다", HttpStatus.BAD_REQUEST);
+        }
+        this.balance -= amount;
     }
 }
