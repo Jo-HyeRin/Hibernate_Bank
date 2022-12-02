@@ -39,7 +39,7 @@ public class TransactionApiController {
     public ResponseEntity<?> withdraw(@RequestBody WithdrawReqDto withdrawReqDto, @PathVariable Long number,
             @AuthenticationPrincipal LoginUser loginUser) {
         WithdrawRespDto withdrawRespDto = transactionService.출금하기(withdrawReqDto, number, loginUser.getUser().getId());
-        return new ResponseEntity<>(new ResponseDto<>("출금성공", withdrawReqDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("출금성공", withdrawRespDto), HttpStatus.CREATED);
     }
 
 }

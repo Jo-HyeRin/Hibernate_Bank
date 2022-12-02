@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(@Param("username") String username);
 
     // userId를 fk로 들고있는 조건 충족 account 다 땡겨온다.
-    @Query("select u from User u join fetch u.accounts ac where ac.isActive = true and u.id = :userId")
+    @Query("select u from User u left join u.accounts ac on ac.isActive = true where u.id = :userId")
     User findByActiveUserIdv3(@Param("userId") Long userId);
 }
