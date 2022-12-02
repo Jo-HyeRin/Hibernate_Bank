@@ -46,4 +46,24 @@ public class TransactionReqDto {
         }
     }
 
+    @Setter
+    @Getter
+    public static class TransferReqDto {
+        private Long amount;
+        private String password;
+        private String gubun;
+
+        public Transaction toEntity(Account withdrawAccount, Account depositAccount) {
+            Transaction transaction = Transaction.builder()
+                    .withdrawAccount(withdrawAccount)
+                    .depositAccount(depositAccount)
+                    .withdrawAccountBalance(withdrawAccount.getBalance())
+                    .depositAccountBalance(depositAccount.getBalance())
+                    .amount(amount)
+                    .gubun(TransactionEnum.valueOf(gubun))
+                    .build();
+            return transaction;
+        }
+    }
+
 }

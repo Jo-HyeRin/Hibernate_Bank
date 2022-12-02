@@ -15,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 import shop.mtcoding.bank.config.auth.LoginUser;
 import shop.mtcoding.bank.dto.ResponseDto;
 import shop.mtcoding.bank.dto.TransactionReqDto.DepositReqDto;
+import shop.mtcoding.bank.dto.TransactionReqDto.TransferReqDto;
 import shop.mtcoding.bank.dto.TransactionReqDto.WithdrawReqDto;
 import shop.mtcoding.bank.dto.TransactionRespDto.DepositRespDto;
+import shop.mtcoding.bank.dto.TransactionRespDto.TransferRespDto;
 import shop.mtcoding.bank.dto.TransactionRespDto.WithdrawRespDto;
 import shop.mtcoding.bank.service.TransactionService;
 
@@ -35,11 +37,21 @@ public class TransactionApiController {
         return new ResponseEntity<>(new ResponseDto<>("입금성공", depositRespDto), HttpStatus.CREATED);
     }
 
+    // 출금하기
     @PostMapping("/account/{number}/withdraw")
     public ResponseEntity<?> withdraw(@RequestBody WithdrawReqDto withdrawReqDto, @PathVariable Long number,
             @AuthenticationPrincipal LoginUser loginUser) {
         WithdrawRespDto withdrawRespDto = transactionService.출금하기(withdrawReqDto, number, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>("출금성공", withdrawRespDto), HttpStatus.CREATED);
+    }
+
+    // 이체하기
+    @PostMapping("/account/{withdrawNumber}/{depositNumber}/transfer")
+    public ResponseEntity<?> transfer(@RequestBody TransferReqDto transferReqDto, @PathVariable Long withdrawNumber,
+            @PathVariable Long depositNumber, @AuthenticationPrincipal LoginUser loginUser) {
+        TransferRespDto transferRespDto = transactionService.이체하기(transferReqDto, withdrawNumber, depositNumber,
+                loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>("이체성공", transferRespDto), HttpStatus.CREATED);
     }
 
 }
