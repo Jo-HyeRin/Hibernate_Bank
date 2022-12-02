@@ -46,7 +46,7 @@ public class TransactionApiController {
     }
 
     // 이체하기
-    @PostMapping("/account/{withdrawNumber}/{depositNumber}/transfer")
+    @PostMapping("/withdraw/{withdrawNumber}/deposit/{depositNumber}/transfer")
     public ResponseEntity<?> transfer(@RequestBody TransferReqDto transferReqDto, @PathVariable Long withdrawNumber,
             @PathVariable Long depositNumber, @AuthenticationPrincipal LoginUser loginUser) {
         TransferRespDto transferRespDto = transactionService.이체하기(transferReqDto, withdrawNumber, depositNumber,
