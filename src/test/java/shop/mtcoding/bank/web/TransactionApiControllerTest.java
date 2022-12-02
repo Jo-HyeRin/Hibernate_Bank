@@ -26,6 +26,7 @@ import shop.mtcoding.bank.domain.transaction.TransactionRepository;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
 import shop.mtcoding.bank.dto.TransactionReqDto.DepositReqDto;
+import shop.mtcoding.bank.dto.TransactionReqDto.WithdrawReqDto;
 
 // @Transactional // 메서드실행할때마다 롤백되는 springframework 어노테이션 
 // -> 우리는 PK 자동생성때문에 autoincrement 자동 초기화가 필요하다. truncate 사용할것.
@@ -84,6 +85,31 @@ public class TransactionApiControllerTest extends DummyEntity {
         resultActions.andExpect(status().isCreated());
         resultActions.andExpect(jsonPath("$.data.from").value("ATM"));
         resultActions.andExpect(jsonPath("$.data.amount").value(500L));
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void withdraw_test() throws Exception {
+        // given
+        Long number = 1111L;
+
+        WithdrawReqDto withdrawReqDto = new WithdrawReqDto();
+        withdrawReqDto.setPassword("1234");
+        withdrawReqDto.setAmount(500L);
+        withdrawReqDto.setGubun("WITHDRAW");
+        String requestBody = om.writeValueAsString(withdrawReqDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(post("/api/account/" + number + "/withdraw").content(requestBody)
+                        .contentType(APPLICATION_JSON_UTF8));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(jsonPath("$.data.withdrawAccountBalance").value(500));
     }
 
 }
