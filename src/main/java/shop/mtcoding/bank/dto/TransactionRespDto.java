@@ -1,10 +1,16 @@
 package shop.mtcoding.bank.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
 import shop.mtcoding.bank.domain.transaction.Transaction;
+import shop.mtcoding.bank.dto.TransactionRespDto.TransactionListRespDto.TransactionDto;
+import shop.mtcoding.bank.util.CustomDateUtil;
 
 public class TransactionRespDto {
 
@@ -70,4 +76,48 @@ public class TransactionRespDto {
             this.withdrawAccountBalance = transaction.getWithdrawAccountBalance();
         }
     }
+
+    @Setter
+    @Getter
+    public static class TransactionListRespDto {
+        // DTO를 리스트에 넣어서 응답하지 말고 DTO를 응답하도록 하자.
+        private List<TransactionDto> transactions = new ArrayList<>();
+
+        public TransactionListRespDto(List<Transaction> transactions) {
+            this.transactions = transactions.stream().map((transaction) -> new TransactionDto(transaction))
+                    .collect(Collectors.toList());
+        }
+
+        @Setter
+        @Getter
+        public class TransactionDto {
+            private Long id;
+            private Long amount;
+            private Long balance;
+            private String gubun;
+            private String createdAt;
+            private String from;
+            private String to;
+
+            public TransactionDto(Transaction transaction) {
+                this.id = transaction.getId();
+                this.amount = transaction.getAmount();
+                this.balance = transaction.getWithdrawAccountBalance();
+                this.gubun = transaction.getGubun().getValue();
+                this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreatedAt());
+
+                if (gubun.equals("WITHDRAW")) {
+                    this.from = transaction.getWithdrawAccount().getNumber() + "";
+                    this.to = "ATM";
+                } else if (gubun.equals("DEPOSIT")) {
+                    this.from = "ATM";
+                    this.to = transaction.getDepositAccount().getNumber() + "";
+                } else {
+                    this.from = transaction.getWithdrawAccount().getNumber() + "";
+                    this.to = transaction.getDepositAccount().getNumber() + "";
+                }
+            }
+        }
+    }
+
 }

@@ -18,13 +18,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.mtcoding.bank.config.enums.TransactionEnum;
+import shop.mtcoding.bank.domain.AudingTime;
 import shop.mtcoding.bank.domain.account.Account;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "transaction")
 @Entity
-public class Transaction { // 거래내역
+public class Transaction extends AudingTime { // 거래내역
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

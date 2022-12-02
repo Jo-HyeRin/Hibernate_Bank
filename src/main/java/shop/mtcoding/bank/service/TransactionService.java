@@ -1,5 +1,7 @@
 package shop.mtcoding.bank.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import shop.mtcoding.bank.dto.TransactionReqDto.DepositReqDto;
 import shop.mtcoding.bank.dto.TransactionReqDto.TransferReqDto;
 import shop.mtcoding.bank.dto.TransactionReqDto.WithdrawReqDto;
 import shop.mtcoding.bank.dto.TransactionRespDto.DepositRespDto;
+import shop.mtcoding.bank.dto.TransactionRespDto.TransactionListRespDto;
 import shop.mtcoding.bank.dto.TransactionRespDto.TransferRespDto;
 import shop.mtcoding.bank.dto.TransactionRespDto.WithdrawRespDto;
 
@@ -123,6 +126,19 @@ public class TransactionService {
 
         // DTO 응답
         return new TransferRespDto(transactionPS);
+    }
+
+    public TransactionListRespDto 입출금목록보기(Long userId, Long accountId, String gubun, Integer Page) {
+        // 해당 계좌 존재 여부
+        Account accountPS = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CustomApiException("해당 계좌 없음", HttpStatus.BAD_REQUEST));
+
+        // 계좌 소유자 확인
+        accountPS.isOwner(userId);
+
+        // 입출금 내역 조회
+        List<Transaction> transactionListPS = transactionRepository.findAllByAccountId(accountId, gubun, Page);
+        return new TransactionListRespDto(transactionListPS);
     }
 
 }
